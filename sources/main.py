@@ -11,12 +11,14 @@ def gf2_multiply(a, b):
 def main() -> None:
     # GF179 = GF(3,13)
     GF179 = GF()
-    BITS = 100#GF179.m 
-    A,B = getrandbits(BITS), getrandbits(BITS)
+    BITS = GF179.m 
+    # A,B = getrandbits(BITS), getrandbits(BITS)
+    A,B = 0x10065cb0425d5a61e16c2de3199c39b4dc33300cc573e, 0x322cf6939d4b453e274bce09d7316747a3926dd062b4a
+
     # A,B = 6,7
-    # print(GF179.poly)
-    print(hex(A),hex(B))
-    print(A.bit_length(),B.bit_length())
+    # print(GF179.poly.words)
+    # print(hex(A),hex(B))
+    # print(A.bit_length(),B.bit_length())
     # tmp = GFelement([1,0,0,0,0,0])
     # print(tmp.bitLen())
     # A = 1 
@@ -27,22 +29,17 @@ def main() -> None:
 
     # A,B = 7,6
     a,b = GF179(A),GF179(B)
-    print(a,b)
+    # print(a,b)
     # C = (A ^ B)
-    # c = a + b 
-
-    C = gf2_multiply([int(i) for i in list(bin(A)[2:])], [int(i) for i in list(bin(B)[2:])])
-    print(C > 13)
-    c = a*b
-    print("results C,c")
-    print(hex(C))
+    c = a + b 
     print(c)
-    print("calling reduce on c from main")
-    c.reduce()
-    c_ = GF179(C)
-    print("python main results c_,c")
-    print(c_)
-    print(c)
-
+    # C = gf2_multiply([int(i) for i in list(bin(A)[2:])], [int(i) for i in list(bin(B)[2:])])
+    d = a*b
+    # print("results C,c")
+    # print(hex(C))
+    d.reduce()
+    # c_ = GF179(C)
+    print(d) 
+    # print(c_)
 if __name__ == "__main__":
     main()

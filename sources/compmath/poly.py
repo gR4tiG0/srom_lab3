@@ -76,8 +76,8 @@ class GFelement:
         return res
     
     def reduce(self):
-        print("reduce called")
-        print(self)
+        # print("reduce called")
+        # print(self)
         self_D = list(self.words)
         global POLY 
         mod_D = list(POLY.words)

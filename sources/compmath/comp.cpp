@@ -105,58 +105,51 @@ extern "C" {
     }
     void reduce(uint64_t* res, uint64_t* a, uint64_t* p, int aSize, int pSize)
     { 
-      printf("a: ");
-      prArr(a,aSize);
-      for (int i = 0; i < pSize; i++) 
-      {
-        res[i] = 0;
-      }
       int k = bitLen(a, aSize);
       int n = bitLen(p, pSize);
       if (k < n) {
-        for (int i = 0; i < pSize; i++){
-          res[i] = a[i];
-        }
-        printf("exiting due k < n\n");
-      } else {
-      // printf("k = %i, n = %i\n",k,n);
-      uint64_t* p_ = new uint64_t[aSize]();
-      uint64_t* c = new uint64_t[aSize]();
-      uint64_t* t = new uint64_t[aSize]();
-      for (int i = 0; i < aSize; i++)
-      {
-        if (i > pSize) 
+        for (int i = 0; i < aSize; i++)
         {
-          p_[i] = 0;
-        } else {
-          p_[i] = p[i];
+          if (i < pSize) {
+            res[i] = a[i];
+          } else {
+            res[i] = 0;
+          }
         }
-        t[i] = a[i];
-        c[i] = 0;
-      }
-      // printf("psize,asize %i, %i\n",pSize,aSize);
-      // printf("p&a: \n");
-      // prArr(p_, aSize);
+      } else {
+        uint64_t* h1 = new uint64_t[aSize]();
+        uint64_t* h2 = new uint64_t[aSize]();
+        for (int i = 0; i < aSize; i++) 
+        {
+          if (i < pSize) {
+            h1[i] = p[i];
+          } else {
+            h1[i] = 0;
+          }
+          res[i] = a[i];
+          h2[i] = 0;
+        }
+
+      // printf("a,p,res,h1,h2 at start\n");
       // prArr(a,aSize);
-      while (k >= n)
-      {
-        // printf("we are here\n");
-        lshift(c,p_, aSize, k-n);
-        // printf("tmp&t:\n");
-        // prArr(tmp,aSize);
-        printf("before k = %i, n = %i\n",k,n);
-        prArr(t,aSize);
-        add(t,c,t,aSize);
-        k = bitLen(t, aSize);
-        printf("after k = %i, n = %i\n",k,n);
+      // prArr(p,pSize);
+      // prArr(res,aSize);
+      // prArr(h1,aSize);
+      // prArr(h2, aSize);
+
+      while (k >= n) {
+        lshift(h2,h1,pSize,k-n);
+        // printf("h1,h2,after shift\n");
+        // prArr(h1,aSize);
+        // prArr(h2,aSize);
+        add(res,res,h2,aSize);
+        // printf("res after addition\n");
+        // prArr(res, aSize);
+        k = bitLen(res,aSize);
+        // printf("end of cycle k = %i, n = %i\n",k,n);
       }
-      for (int i = 0; i < pSize; i++) {
-        res[i] = t[i];
-      }
-      // prArr(res,pSize);
-      // delete[] c;
-      // delete[] p_;
-      // delete[] t;
+      // delete[] h1;
+      // delete[] h2;
       }
     }
     void mul(uint64_t* res, uint64_t* a, uint64_t* b, int size)
