@@ -66,8 +66,10 @@ class GFelement:
         other_c = (ctypes.c_uint64 * size)(*other_D)
         result_c = (ctypes.c_uint64 * (size*2))() 
         lib.mul(result_c,self_c,other_c,size)
-        result = list(result_c)
-        return GFelement(result)
+        result_ = list(result_c)
+        result = GFelement(result_)
+        result.reduce()
+        return result
 
     def getBase(self) -> int:
         res = 0
@@ -88,8 +90,13 @@ class GFelement:
         result_c = (ctypes.c_uint64 * pSize)()
         lib.reduce(result_c,self_c,mod_c,aSize,pSize)
         result = list(result_c)
+        # print("poly.py reduce, res raw", result)
+        while len(result) > 1 and result[-1] == 0:
+            result.pop()
+        # print("poly.py reduce, res cleared", result)
         self.words = result
         self.l = len(self.words)
+        # print("poly.py reduce, self.words",self.words)
     
     def lshift(self, n):
         self_D = list(self.words)
@@ -111,7 +118,21 @@ class GFelement:
         # print(type(res))
         # print(res)
         return int(res)
-
+    
+    def __pow__(self,n):
+        if n == 2:
+            # print(self.words)
+            self_D = list(self.words)
+            # print("poly.py self.words:",self_D)
+            size = len(self_D)
+            self_c = (ctypes.c_uint64 * size)(*self_D)
+            res_c = (ctypes.c_uint64 * (size*2))()
+            lib.sqr(res_c,self_c,size)
+            res_ = list(res_c)
+            res = GFelement(res_)
+            # print(res)
+            res.reduce()
+            return res
     def __repr__(self):
         return hex(self.getBase())
     

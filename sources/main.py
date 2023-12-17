@@ -37,9 +37,12 @@ def main() -> None:
     d = a*b
     # print("results C,c")
     # print(hex(C))
-    d.reduce()
     # c_ = GF179(C)
     print(d) 
+    # f = GF179(2**179 - 1)
+    # print("python main, f:",f,"f words:",f.words)
+    e = a**2 
+    print(e)
     # print(c_)
 if __name__ == "__main__":
     main()

@@ -172,4 +172,25 @@ extern "C" {
       }
       delete[] tmp;
     }
+    void sqr(uint64_t* res, uint64_t* a, int size) 
+    {
+      // printf("we are here\n");
+      for (int i = 0; i < 2*size; i++) {
+        res[i] = 0;
+      }
+      int k = bitLen(a, size);
+      // printf("c++ a:");
+      // prArr(a,size);
+      for (int i = 0; i < k; i++) {
+        // printf("a[i] = %lu, shift check = %lu\n",a[i/64], ((uint64_t)1 << (i%64)));
+        if (a[i/64] & ((uint64_t)1 << (i%64))) {
+          // printf("i=%i 2i/64 %i : ",i,(2*i)/64);
+          res[(2*i)/64] ^= ((uint64_t)1 << (2*i)%64);
+          // printf("res in cycle: ");
+          // prArr(res,size*2);
+        }
+      }
+      // prArr(res,size*2);
+    }
+
 }
